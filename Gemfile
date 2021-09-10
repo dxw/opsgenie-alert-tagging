@@ -8,3 +8,4 @@ gem 'rspec'
 
 gem 'standardrb'
 gem 'webmock'
+gem 'activesupport'
