@@ -23,6 +23,8 @@ class OpsgenieAlertTagging
       "Authorization" => "GenieKey #{ENV['OPSGENIE_API_KEY']}"
     })
 
+    puts "There are no alerts for #{format_date}" if results["data"].empty?
+
     results["data"]
   end
 
