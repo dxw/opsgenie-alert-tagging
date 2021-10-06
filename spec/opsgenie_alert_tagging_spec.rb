@@ -14,7 +14,7 @@ RSpec.describe OpsgenieAlertTagging do
     it 'returns alerts from OpsGenie for a given date' do
       expect(HTTParty).to receive(:get)
         .with(
-          "https://api.opsgenie.com/v2/alerts?query=createdAt%3A22-08-2021&sort=createdAt&order=desc",
+          "https://api.opsgenie.com/v2/alerts?limit=100&query=createdAt%3A22-08-2021&sort=createdAt&order=desc",
           headers: {
             "Content-Type" => "application/json",
             "Authorization" => anything

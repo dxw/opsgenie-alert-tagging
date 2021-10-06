@@ -18,7 +18,7 @@ class OpsgenieAlertTagging
     parse_date = Date.parse(date)
     format_date = parse_date.strftime("%d-%m-%Y")
 
-    results = HTTParty.get("https://api.opsgenie.com/v2/alerts?query=createdAt%3A#{format_date}&sort=createdAt&order=desc", :headers => {
+    results = HTTParty.get("https://api.opsgenie.com/v2/alerts?limit=100&query=createdAt%3A#{format_date}&sort=createdAt&order=desc", :headers => {
       "Content-Type" => "application/json",
       "Authorization" => "GenieKey #{ENV['OPSGENIE_API_KEY']}"
     })
