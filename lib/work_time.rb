@@ -25,5 +25,9 @@ class WorkTime
   def self.time_range_wakinghours_weekday
     [18..23, 8..10].flat_map(&:to_a)
   end
+
+  def self.time_range_sleepinghours
+    [00..8, [23]].flat_map(&:to_a)
+  end
 end
 
