@@ -12,5 +12,10 @@ class WorkTime
       end
     end
   end
+
+  def self.time_with_zone(string:)
+    Time.zone = 'Europe/London'
+    Time.zone.parse(string)
+  end
 end
 

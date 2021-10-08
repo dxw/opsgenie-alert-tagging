@@ -20,7 +20,7 @@ class OpsgenieAlert
   end
 
   def created_at
-    time = time_with_zone(string: alert["createdAt"])
+    time = WorkTime.time_with_zone(string: alert["createdAt"])
   end
 
   def created_at_date
@@ -56,11 +56,6 @@ class OpsgenieAlert
   end
 
   private
-
-  def time_with_zone(string:)
-    Time.zone = 'Europe/London'
-    Time.zone.parse(string)
-  end
 
   def time_range_inhours
     10..18
