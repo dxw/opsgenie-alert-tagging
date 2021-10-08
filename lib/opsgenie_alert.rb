@@ -1,6 +1,7 @@
 require 'httparty'
 require 'active_support/all'
 require 'active_support/time'
+require 'work_time'
 
 class OpsgenieAlert
 
@@ -51,24 +52,10 @@ class OpsgenieAlert
   end
 
   def bank_holiday?
-    bank_holidays.include?(created_at_date)
+    WorkTime.bank_holidays.include?(created_at_date)
   end
 
   private
-
-  def bank_holidays
-    @bank_holidays ||= begin
-      results = HTTParty.get("https://www.gov.uk/bank-holidays.json",
-        :headers => {
-        "Content-Type" => "application/json"
-      })
-
-      events = results["england-and-wales"]["events"]
-      events.map do |event|
-        event["date"]
-      end
-    end
-  end
 
   def time_with_zone(string:)
     Time.zone = 'Europe/London'

@@ -163,7 +163,7 @@ RSpec.describe OpsgenieAlert do
 
   describe '#bank_holiday?' do
     before do
-      allow_any_instance_of(OpsgenieAlert).to receive(:bank_holidays).and_return(fake_bank_holidays)
+      allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
     end
 
     it 'returns true for an alert that is on a bank holiday' do

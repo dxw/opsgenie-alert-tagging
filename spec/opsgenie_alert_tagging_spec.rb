@@ -30,7 +30,7 @@ RSpec.describe OpsgenieAlertTagging do
 
   describe '#all_updated_alerts' do
     before do
-      allow_any_instance_of(OpsgenieAlert).to receive(:bank_holidays).and_return(fake_bank_holidays)
+      allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
     end
 
     it 'adds tag for inhours alerts'  do
