@@ -123,39 +123,37 @@ RSpec.describe OpsgenieAlert do
     end
   end
 
-  describe '#wakinghours_weekday?' do
-    it 'returns a true when an alert was created within a weekday wakinghours range' do
-      wakinghours_weekday_date_time = "2022-12-09T09:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>wakinghours_weekday_date_time)
-      result = alert.wakinghours_weekday?
+  describe '#during_out_of_hours_waking_hours?' do
+    it 'returns a true when an alert was created during out of of hours waking hours' do
+      out_of_hours_waking_hours_date_time = "2022-12-09T09:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>out_of_hours_waking_hours_date_time)
+      result = alert.during_out_of_hours_waking_hours?
 
       expect(result).to eq(true)
     end
 
-    it 'returns a false when an alert was created at a time outside of the weekday wakinghour range' do
-      not_wakinghours_weekday_date_time = "2022-12-09T05:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>not_wakinghours_weekday_date_time)
-      result = alert.wakinghours_weekday?
+    it 'returns a false when an alert was created at a time outside of out of of hours waking hours' do
+      not_out_of_hours_waking_hours_date_time = "2022-12-09T05:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>not_out_of_hours_waking_hours_date_time)
+      result = alert.during_out_of_hours_waking_hours?
 
       expect(result).to eq(false)
     end
-  end
 
-  describe '#wakinghours_weekend?' do
-    it 'returns a true when an alert was created within a weekend wakinghour range' do
-      wakinghours_weekdend_date_time = "2022-10-15T08:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>wakinghours_weekdend_date_time)
-      result = alert.wakinghours_weekend?
+    it 'returns a false when an alert was created in hours during waking hours' do
+      in_hours_waking_hours_date_time = "2022-12-09T11:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>in_hours_waking_hours_date_time)
+      result = alert.during_out_of_hours_waking_hours?
+
+      expect(result).to eq(false)
+    end
+
+    it 'returns a true when an alert was created anytime during waking hours on a weekend' do
+      weekend_waking_hours_date_time = "2022-12-11T11:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>weekend_waking_hours_date_time)
+      result = alert.during_out_of_hours_waking_hours?
 
       expect(result).to eq(true)
-    end
-
-    it 'returns a false when an alert was created at a time outside of the weekday wakinghour range' do
-      not_wakinghours_weekday_date_time = "2022-12-09T05:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>not_wakinghours_weekday_date_time)
-      result = alert.wakinghours_weekday?
-
-      expect(result).to eq(false)
     end
   end
 
@@ -177,9 +175,9 @@ RSpec.describe OpsgenieAlert do
     end
 
     it 'returns a false when an alert was created at a time outside of a sleepinghour range' do
-      not_sleeping_date_time = "2022-01-11T05:00:00.000Z"
+      not_sleeping_date_time = "2022-01-11T09:00:00.000Z"
       alert = OpsgenieAlert.new("createdAt"=>not_sleeping_date_time)
-      result = alert.wakinghours_weekday?
+      result = alert.sleepinghours?
 
       expect(result).to eq(false)
     end

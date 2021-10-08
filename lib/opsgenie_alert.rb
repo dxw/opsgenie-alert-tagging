@@ -50,12 +50,9 @@ class OpsgenieAlert
     saturday? || sunday?
   end
 
-  def wakinghours_weekday?
-    WorkTime.time_range_wakinghours_weekday.include?(created_at.hour)
-  end
-
-  def wakinghours_weekend?
-    WorkTime.time_range_wakinghours_weekend.include?(created_at.hour)
+  def during_out_of_hours_waking_hours?
+    return false if in_hours?
+    WorkTime.time_range_waking_hours.include?(created_at.hour)
   end
 
   def sleepinghours?

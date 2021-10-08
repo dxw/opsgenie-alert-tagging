@@ -37,16 +37,16 @@ RSpec.describe OpsgenieAlertTagging do
       expect(outcome).to include(in_hours_result)
     end
 
-    it 'adds tag for wakinghours weekday alerts' do
-      wakinghours_weekday_result = {:tags=>["wakinghours", "OOH"], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
+    it 'adds tag for waking hours weekday alerts' do
+      waking_hours_weekday_result = {:tags=>["wakinghours", "OOH"], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
       outcome = subject.all_updated_alerts
-      expect(outcome).to include(wakinghours_weekday_result)
+      expect(outcome).to include(waking_hours_weekday_result)
     end
 
-    it 'adds tag for wakinghours weekend alerts' do
-      wakinghours_weekend_result = {:tags=>["wakinghours", "OOH"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
+    it 'adds tag for waking hours weekend alerts' do
+      waking_hours_weekend_result = {:tags=>["wakinghours", "OOH"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
       outcome = subject.all_updated_alerts
-      expect(outcome).to include(wakinghours_weekend_result)
+      expect(outcome).to include(waking_hours_weekend_result)
     end
 
     it 'adds tag for sleepinghours alerts' do
@@ -56,9 +56,9 @@ RSpec.describe OpsgenieAlertTagging do
     end
 
     it 'adds tag for bank holiday alerts' do
-      wakinghours_bank_holiday_result = {:tags=>["wakinghours", "OOH"], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
+      waking_hours_bank_holiday_result = {:tags=>["wakinghours", "OOH"], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
       outcome = subject.all_updated_alerts
-      expect(outcome).to include(wakinghours_bank_holiday_result)
+      expect(outcome).to include(waking_hours_bank_holiday_result)
     end
 
     context 'when an alert has a tag present' do
@@ -122,19 +122,19 @@ RSpec.describe OpsgenieAlertTagging do
   def fake_opsgenie_alerts_empty_tags
     [
       fake_alert_in_hours_weekday,
-      fake_alert_wakinghours_weekday,
+      fake_alert_waking_hours_weekday,
       fake_alert_sleepinghours,
-      fake_alert_wakinghours_weekend,
-      fake_alert_wakinghours_bank_holiday
+      fake_alert_waking_hours_weekend,
+      fake_alert_waking_hours_bank_holiday
     ]
   end
 
   def fake_opsgenie_alerts_with_existing_tags
     [
       fake_alert_in_hours_weekday_tags_existing,
-      fake_alert_wakinghours_weekday_tags_existing,
+      fake_alert_waking_hours_weekday_tags_existing,
       fake_alert_sleepinghours_tags_existing,
-      fake_alert_wakinghours_weekend_tags_existing,
+      fake_alert_waking_hours_weekend_tags_existing,
       fake_alert_bank_holiday_existing
     ]
   end
@@ -147,7 +147,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_wakinghours_weekday
+  def fake_alert_waking_hours_weekday
     {
       "id"=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592",
       "tags"=>[],
@@ -155,7 +155,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_wakinghours_weekend
+  def fake_alert_waking_hours_weekend
     {
       "id"=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401",
       "tags"=>[],
@@ -171,7 +171,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_wakinghours_bank_holiday
+  def fake_alert_waking_hours_bank_holiday
     {
       "id"=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423",
       "tags"=>[],
@@ -186,7 +186,7 @@ RSpec.describe OpsgenieAlertTagging do
       "createdAt"=>"2021-08-23T11:18:25.865Z"}
   end
 
-  def fake_alert_wakinghours_weekday_tags_existing
+  def fake_alert_waking_hours_weekday_tags_existing
     {
       "id"=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592",
       "tags"=>["wakinghours", "OOH"],
@@ -194,7 +194,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_wakinghours_weekend_tags_existing
+  def fake_alert_waking_hours_weekend_tags_existing
     {
       "id"=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401",
       "tags"=>["wakinghours", "OOH"],
