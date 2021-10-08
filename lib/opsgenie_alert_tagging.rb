@@ -1,6 +1,5 @@
 require 'httparty'
 require 'dotenv/load'
-require 'pry'
 
 class OpsgenieAlertTagging
 
