@@ -103,6 +103,16 @@ RSpec.describe OpsgenieAlert do
     end
   end
 
+  describe '#out_of_hours?' do
+    it 'returns a true when an alert was created out of hours' do
+      out_of_hours_date_time = "2022-11-11T22:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>out_of_hours_date_time)
+      result = alert.out_of_hours?
+
+      expect(result).to eq(true)
+    end
+  end
+
   describe '#on_weekend?' do
     it 'returns true if alert is created on a weekend' do
       on_weekend_date_time = "2022-01-16T10:00:00.865Z"

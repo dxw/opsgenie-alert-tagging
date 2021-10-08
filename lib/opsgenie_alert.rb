@@ -42,6 +42,10 @@ class OpsgenieAlert
     WorkTime.time_range_in_hours.include?(created_at.hour)
   end
 
+  def out_of_hours?
+    !in_hours?
+  end
+
   def on_weekend?
     saturday? || sunday?
   end
