@@ -20,7 +20,7 @@ class OpsgenieAlert
   end
 
   def created_at
-    time = WorkTime.time_with_zone(string: alert["createdAt"])
+    time = WorkTime.parse_time_with_zone(alert["createdAt"])
   end
 
   def created_at_date

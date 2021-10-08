@@ -13,9 +13,9 @@ class WorkTime
     end
   end
 
-  def self.time_with_zone(string:)
+  def self.parse_time_with_zone(time)
     Time.zone = 'Europe/London'
-    Time.zone.parse(string)
+    Time.zone.parse(time)
   end
 
   def self.time_range_in_hours
