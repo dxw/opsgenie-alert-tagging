@@ -17,5 +17,9 @@ class WorkTime
     Time.zone = 'Europe/London'
     Time.zone.parse(string)
   end
+
+  def self.time_range_inhours
+    10..18
+  end
 end
 
