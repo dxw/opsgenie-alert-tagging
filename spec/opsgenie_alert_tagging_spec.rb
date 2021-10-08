@@ -37,26 +37,32 @@ RSpec.describe OpsgenieAlertTagging do
       expect(outcome).to include(in_hours_result)
     end
 
-    it 'adds tag for waking hours weekday alerts' do
-      waking_hours_weekday_result = {:tags=>["wakinghours", "OOH"], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
+    it 'adds tag for out of hours alerts'  do
+      out_of_hours_result = {:tags=>["OOH", "wakinghours"], :id=>"ssg5bfb-0987-2j5i-y876-5f8ad111cf45-2846378651987"}
+      outcome = subject.all_updated_alerts
+      expect(outcome).to include(out_of_hours_result)
+    end
+
+    it 'adds tag for waking hours alerts' do
+      waking_hours_weekday_result = {:tags=>["OOH", "wakinghours"], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_weekday_result)
     end
 
-    it 'adds tag for waking hours weekend alerts' do
-      waking_hours_weekend_result = {:tags=>["wakinghours", "OOH"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
+    it 'adds tag for weekend waking hours alerts' do
+      waking_hours_weekend_result = {:tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_weekend_result)
     end
 
     it 'adds tag for sleeping hours alerts' do
-      sleeping_hours_result = {:tags=>["sleepinghours", "OOH"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
+      sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(sleeping_hours_result)
     end
 
     it 'adds tag for bank holiday alerts' do
-      waking_hours_bank_holiday_result = {:tags=>["wakinghours", "OOH"], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
+      waking_hours_bank_holiday_result = {:tags=>["OOH", "wakinghours"], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_bank_holiday_result)
     end
@@ -67,7 +73,7 @@ RSpec.describe OpsgenieAlertTagging do
       end
 
       it 'only adds unique tags to the alert' do
-        result_with_unique_tags = {:tags=>["wakinghours", "OOH"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
+        result_with_unique_tags = {:tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
         outcome = subject.all_updated_alerts
         expect(outcome).to include(result_with_unique_tags)
       end
@@ -79,7 +85,7 @@ RSpec.describe OpsgenieAlertTagging do
       end
 
       it 'tags the alert as sleeping hours' do
-        sleeping_hours_result = {:tags=>["sleepinghours", "OOH"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
+        sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
         outcome = subject.all_updated_alerts
         expect(outcome).to include(sleeping_hours_result)
       end
@@ -121,25 +127,27 @@ RSpec.describe OpsgenieAlertTagging do
 
   def fake_opsgenie_alerts_empty_tags
     [
-      fake_alert_in_hours_weekday,
-      fake_alert_waking_hours_weekday,
+      fake_alert_in_hours,
+      fake_alert_out_of_hours,
+      fake_alert_waking_hours,
+      fake_alert_weekend_waking_hours,
       fake_alert_sleeping_hours,
-      fake_alert_waking_hours_weekend,
-      fake_alert_waking_hours_bank_holiday
+      fake_alert_bank_holidays
     ]
   end
 
   def fake_opsgenie_alerts_with_existing_tags
     [
-      fake_alert_in_hours_weekday_tags_existing,
-      fake_alert_waking_hours_weekday_tags_existing,
+      fake_alert_in_hours_tags_existing,
+      fake_alert_out_of_hours_tags_existing,
+      fake_alert_waking_hours_tags_existing,
+      fake_alert_weekend_waking_hours_tags_existing,
       fake_alert_sleeping_hours_tags_existing,
-      fake_alert_waking_hours_weekend_tags_existing,
-      fake_alert_bank_holiday_existing
+      fake_alert_bank_holidays_tags_existing
     ]
   end
 
-  def fake_alert_in_hours_weekday
+  def fake_alert_in_hours
     {
       "id"=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865",
       "tags"=>[],
@@ -147,7 +155,15 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_waking_hours_weekday
+  def fake_alert_out_of_hours
+    {
+      "id"=>"ssg5bfb-0987-2j5i-y876-5f8ad111cf45-2846378651987",
+      "tags"=>[],
+      "createdAt"=>"2021-08-23T20:00:25.865Z"
+    }
+  end
+
+  def fake_alert_waking_hours
     {
       "id"=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592",
       "tags"=>[],
@@ -155,7 +171,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_waking_hours_weekend
+  def fake_alert_weekend_waking_hours
     {
       "id"=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401",
       "tags"=>[],
@@ -171,7 +187,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_waking_hours_bank_holiday
+  def fake_alert_bank_holidays
     {
       "id"=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423",
       "tags"=>[],
@@ -179,25 +195,33 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_in_hours_weekday_tags_existing
+  def fake_alert_in_hours_tags_existing
     {
       "id"=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865",
       "tags"=>["inhours"],
       "createdAt"=>"2021-08-23T11:18:25.865Z"}
   end
 
-  def fake_alert_waking_hours_weekday_tags_existing
+  def fake_alert_out_of_hours_tags_existing
+    {
+      "id"=>"ssg5bfb-0987-2j5i-y876-5f8ad111cf45-2846378651987",
+      "tags"=>["OOH"],
+      "createdAt"=>"2021-08-23T22:00:25.865Z"
+    }
+  end
+
+  def fake_alert_waking_hours_tags_existing
     {
       "id"=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592",
-      "tags"=>["wakinghours", "OOH"],
+      "tags"=>["wakinghours"],
       "createdAt"=>"2021-08-24T20:12:29.592Z"
     }
   end
 
-  def fake_alert_waking_hours_weekend_tags_existing
+  def fake_alert_weekend_waking_hours_tags_existing
     {
       "id"=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401",
-      "tags"=>["wakinghours", "OOH"],
+      "tags"=>["OOH", "wakinghours"],
       "createdAt"=>"2021-08-22T13:20:55.401Z"
     }
   end
@@ -205,15 +229,15 @@ RSpec.describe OpsgenieAlertTagging do
   def fake_alert_sleeping_hours_tags_existing
     {
       "id"=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840",
-      "tags"=>["sleepinghours", "OOH"],
+      "tags"=>["sleepinghours"],
       "createdAt"=>"2021-08-22T04:21:44.84Z"
     }
   end
 
-  def fake_alert_bank_holiday_existing
+  def fake_alert_bank_holidays_tags_existing
     {
       "id"=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423",
-      "tags"=>["wakinghours", "OOH"],
+      "tags"=>["OOH", "wakinghours"],
       "createdAt"=>"2022-06-02T13:18:55.401Z"
     }
   end

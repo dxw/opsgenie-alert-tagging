@@ -37,21 +37,10 @@ class OpsgenieAlertTagging
       result[:tags] = alert.tags
       result[:id] = alert.id
 
-      if alert.bank_holiday?
-        result[:tags] << "wakinghours"
-        result[:tags] << "OOH"
-
-      elsif alert.in_hours?
-        result[:tags] << "inhours"
-
-      elsif alert.during_out_of_hours_waking_hours?
-        result[:tags] << "wakinghours"
-        result[:tags] << "OOH"
-
-      elsif alert.during_sleeping_hours?
-        result[:tags] << "sleepinghours"
-        result[:tags] << "OOH"
-      end
+      result[:tags] << "inhours" if alert.in_hours?
+      result[:tags] << "OOH" if alert.out_of_hours?
+      result[:tags] << "wakinghours" if alert.during_out_of_hours_waking_hours?
+      result[:tags] << "sleepinghours" if alert.during_sleeping_hours?
 
       result[:tags].uniq!
       result
@@ -70,5 +59,4 @@ class OpsgenieAlertTagging
       puts "Updating OpsGenie alert #{alert[:id]} and the response was '#{response["result"]}'."
     end
   end
-
 end
