@@ -26,7 +26,7 @@ class WorkTime
     8..23
   end
 
-  def self.time_range_sleepinghours
+  def self.time_range_sleeping_hours
     [00..8, [23]].flat_map(&:to_a)
   end
 end

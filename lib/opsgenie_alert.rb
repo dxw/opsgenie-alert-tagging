@@ -55,8 +55,8 @@ class OpsgenieAlert
     WorkTime.time_range_waking_hours.include?(created_at.hour)
   end
 
-  def sleepinghours?
-    WorkTime.time_range_sleepinghours.include?(created_at.hour)
+  def during_sleeping_hours?
+    WorkTime.time_range_sleeping_hours.include?(created_at.hour)
   end
 
   def bank_holiday?

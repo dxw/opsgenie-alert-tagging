@@ -48,7 +48,7 @@ class OpsgenieAlertTagging
         result[:tags] << "wakinghours"
         result[:tags] << "OOH"
 
-      elsif alert.sleepinghours?
+      elsif alert.during_sleeping_hours?
         result[:tags] << "sleepinghours"
         result[:tags] << "OOH"
       end

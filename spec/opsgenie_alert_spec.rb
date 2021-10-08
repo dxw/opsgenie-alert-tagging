@@ -157,11 +157,11 @@ RSpec.describe OpsgenieAlert do
     end
   end
 
-  describe '#sleepinghours?' do
+  describe '#during_sleeping_hours?' do
     it 'returns a true when an alert was created within a sleepinghour range' do
       sleeping_date_time = "2022-01-15T05:00:00.000Z"
       alert = OpsgenieAlert.new("createdAt"=>sleeping_date_time)
-      result = alert.sleepinghours?
+      result = alert.during_sleeping_hours?
 
       expect(result).to eq(true)
     end
@@ -169,15 +169,15 @@ RSpec.describe OpsgenieAlert do
     it 'returns a true when an alert was created at 23:00 hours' do
       specific_sleeping_date_time = "2022-01-17T23:00:00.000Z"
       alert = OpsgenieAlert.new("createdAt"=>specific_sleeping_date_time)
-      result = alert.sleepinghours?
+      result = alert.during_sleeping_hours?
 
       expect(result).to eq(true)
     end
 
-    it 'returns a false when an alert was created at a time outside of a sleepinghour range' do
+    it 'returns a false when an alert was created at a time outside of a sleeping hour range' do
       not_sleeping_date_time = "2022-01-11T09:00:00.000Z"
       alert = OpsgenieAlert.new("createdAt"=>not_sleeping_date_time)
-      result = alert.sleepinghours?
+      result = alert.during_sleeping_hours?
 
       expect(result).to eq(false)
     end
