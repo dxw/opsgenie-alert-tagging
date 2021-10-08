@@ -21,5 +21,9 @@ class WorkTime
   def self.time_range_inhours
     10..18
   end
+
+  def self.time_range_wakinghours_weekday
+    [18..23, 8..10].flat_map(&:to_a)
+  end
 end
 

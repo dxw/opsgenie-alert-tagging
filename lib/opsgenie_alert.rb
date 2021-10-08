@@ -40,7 +40,7 @@ class OpsgenieAlert
   end
 
   def wakinghours_weekday?
-    time_range_wakinghours_weekday.include?(created_at.hour)
+    WorkTime.time_range_wakinghours_weekday.include?(created_at.hour)
   end
 
   def wakinghours_weekend?
@@ -56,10 +56,6 @@ class OpsgenieAlert
   end
 
   private
-
-  def time_range_wakinghours_weekday
-    [18..23, 8..10].flat_map(&:to_a)
-  end
 
   def time_range_sleepinghours
     [00..8, [23]].flat_map(&:to_a)
