@@ -35,8 +35,15 @@ class OpsgenieAlert
     created_at.sunday?
   end
 
-  def inhours?
-    WorkTime.time_range_inhours.include?(created_at.hour)
+  def in_hours?
+    return false if on_weekend?
+    return false if bank_holiday?
+
+    WorkTime.time_range_in_hours.include?(created_at.hour)
+  end
+
+  def on_weekend?
+    saturday? || sunday?
   end
 
   def wakinghours_weekday?

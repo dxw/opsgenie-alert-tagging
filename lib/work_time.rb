@@ -18,7 +18,7 @@ class WorkTime
     Time.zone.parse(string)
   end
 
-  def self.time_range_inhours
+  def self.time_range_in_hours
     10..18
   end
 

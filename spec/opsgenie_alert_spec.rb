@@ -5,6 +5,10 @@ RSpec.describe OpsgenieAlert do
   let(:subject) { OpsgenieAlert.new(fake_alert) }
   let(:date_time) { "2021-03-04T10:00:00.000Z" }
 
+  before do
+    allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
+  end
+
   describe '#tags' do
     it 'returns the alert tags' do
       outcome = subject.tags
@@ -81,21 +85,31 @@ RSpec.describe OpsgenieAlert do
     end
   end
 
-  describe '#inhours?' do
-    it 'returns a true when an alert was created inhours' do
-      inhours_date_time = "2022-11-11T10:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>inhours_date_time)
-      result = alert.inhours?
+  describe '#in_hours?' do
+    it 'returns a true when an alert was created in hours' do
+      in_hours_date_time = "2022-11-11T10:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>in_hours_date_time)
+      result = alert.in_hours?
 
       expect(result).to eq(true)
     end
 
-    it 'returns a false when an alert was created at a time outside of inhours' do
-      not_inhours_date_time = "2022-11-11T09:00:00.000Z"
-      alert = OpsgenieAlert.new("createdAt"=>not_inhours_date_time)
-      result = alert.inhours?
+    it 'returns a false when an alert was created at a time outside of in hours' do
+      not_in_hours_date_time = "2022-11-11T09:00:00.000Z"
+      alert = OpsgenieAlert.new("createdAt"=>not_in_hours_date_time)
+      result = alert.in_hours?
 
       expect(result).to eq(false)
+    end
+  end
+
+  describe '#on_weekend?' do
+    it 'returns true if alert is created on a weekend' do
+      on_weekend_date_time = "2022-01-16T10:00:00.865Z"
+      alert = OpsgenieAlert.new("createdAt"=>on_weekend_date_time)
+      result = alert.on_weekend?
+
+      expect(result).to eq(true)
     end
   end
 
@@ -162,10 +176,6 @@ RSpec.describe OpsgenieAlert do
   end
 
   describe '#bank_holiday?' do
-    before do
-      allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
-    end
-
     it 'returns true for an alert that is on a bank holiday' do
       bank_holiday_date_time = "2022-01-03T10:00:00.865Z"
       alert = OpsgenieAlert.new("createdAt"=>bank_holiday_date_time)

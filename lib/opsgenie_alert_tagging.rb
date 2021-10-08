@@ -41,7 +41,7 @@ class OpsgenieAlertTagging
         result[:tags] << "wakinghours"
         result[:tags] << "OOH"
 
-      elsif alert.inhours? && !(alert.saturday? || alert.sunday?)
+      elsif alert.in_hours?
         result[:tags] << "inhours"
 
       elsif alert.wakinghours_weekday?

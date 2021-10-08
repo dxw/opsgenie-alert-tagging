@@ -3,11 +3,13 @@ require './lib/opsgenie_alert_tagging'
 require './lib/opsgenie_alert'
 
 RSpec.describe OpsgenieAlertTagging do
-  before(:each) do
-    allow(HTTParty).to receive(:get).and_return("data" => fake_opsgenie_alerts_empty_tags)
-  end
   let(:date) { "2021-08-22" }
   let(:subject) { OpsgenieAlertTagging.new(date) }
+
+  before do
+    allow(HTTParty).to receive(:get).and_return("data" => fake_opsgenie_alerts_empty_tags)
+    allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
+  end
 
   describe '#list_all_alerts' do
 
@@ -29,14 +31,10 @@ RSpec.describe OpsgenieAlertTagging do
   end
 
   describe '#all_updated_alerts' do
-    before do
-      allow(WorkTime).to receive(:bank_holidays).and_return(fake_bank_holidays)
-    end
-
-    it 'adds tag for inhours alerts'  do
-      inhours_result = {:tags=>["inhours"], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}
+    it 'adds tag for in hours alerts'  do
+      in_hours_result = {:tags=>["inhours"], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}
       outcome = subject.all_updated_alerts
-      expect(outcome).to include(inhours_result)
+      expect(outcome).to include(in_hours_result)
     end
 
     it 'adds tag for wakinghours weekday alerts' do
@@ -123,7 +121,7 @@ RSpec.describe OpsgenieAlertTagging do
 
   def fake_opsgenie_alerts_empty_tags
     [
-      fake_alert_inhours_weekday,
+      fake_alert_in_hours_weekday,
       fake_alert_wakinghours_weekday,
       fake_alert_sleepinghours,
       fake_alert_wakinghours_weekend,
@@ -133,7 +131,7 @@ RSpec.describe OpsgenieAlertTagging do
 
   def fake_opsgenie_alerts_with_existing_tags
     [
-      fake_alert_inhours_weekday_tags_existing,
+      fake_alert_in_hours_weekday_tags_existing,
       fake_alert_wakinghours_weekday_tags_existing,
       fake_alert_sleepinghours_tags_existing,
       fake_alert_wakinghours_weekend_tags_existing,
@@ -141,7 +139,7 @@ RSpec.describe OpsgenieAlertTagging do
     ]
   end
 
-  def fake_alert_inhours_weekday
+  def fake_alert_in_hours_weekday
     {
       "id"=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865",
       "tags"=>[],
@@ -181,7 +179,7 @@ RSpec.describe OpsgenieAlertTagging do
     }
   end
 
-  def fake_alert_inhours_weekday_tags_existing
+  def fake_alert_in_hours_weekday_tags_existing
     {
       "id"=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865",
       "tags"=>["inhours"],
