@@ -15,7 +15,7 @@ GEM
     crack (0.4.5)
       rexml
     diff-lcs (1.4.4)
-    dotenv (2.7.6)
+    dotenv (2.8.0)
     hashdiff (1.0.1)
     httparty (0.18.1)
       mime-types (~> 3.0)
@@ -83,6 +83,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   activesupport
