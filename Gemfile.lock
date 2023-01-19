@@ -15,7 +15,7 @@ GEM
     crack (0.4.5)
       rexml
     diff-lcs (1.4.4)
-    dotenv (2.7.6)
+    dotenv (2.8.1)
     hashdiff (1.0.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
