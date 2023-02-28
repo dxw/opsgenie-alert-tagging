@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# script to tag several days of alerts
+# defaults to tagging yesterday
+
+cd "$(dirname "${BASH_SOURCE[0]}")"/.. || exit 1
+
+NUMBER_OF_DAYS=${1:-0}
+if [ "$NUMBER_OF_DAYS" -ne 0 ]
+then
+  NUMBER_OF_DAYS=$((NUMBER_OF_DAYS-1))
+fi
+
+DEFAULTSTART=$(gdate -I -d "-$((NUMBER_OF_DAYS+1)) day")
+STARTDATE=${2:-$DEFAULTSTART}
+for (( day=0; day<=NUMBER_OF_DAYS; day++ ))
+do
+  FULLDATE=$(gdate -I -d "$STARTDATE +${day} day")
+  echo "processing $FULLDATE" 
+  bundle exec rake opsgenie_alert_tagging:add_tags["$FULLDATE"]
+  echo "processed $FULLDATE" 
+done
+
