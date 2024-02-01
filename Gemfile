@@ -10,3 +10,5 @@ gem 'standardrb'
 gem 'webmock'
 gem 'activesupport'
 gem 'rake'
+
+gem "opsgenie-schedule", "~> 0.1.4"
