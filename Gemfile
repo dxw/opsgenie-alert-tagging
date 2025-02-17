@@ -13,3 +13,5 @@ gem 'activesupport'
 gem 'rake'
 
 gem "opsgenie-schedule", "~> 0.1.4"
+
+gem "ostruct", "~> 0.6.1"
