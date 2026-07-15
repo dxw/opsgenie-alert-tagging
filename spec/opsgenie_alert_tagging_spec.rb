@@ -32,37 +32,37 @@ RSpec.describe OpsgenieAlertTagging do
 
   describe '#all_updated_alerts' do
     it 'adds tag for in hours alerts'  do
-      in_hours_result = {:tags=>["inhours"], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}
+      in_hours_result = {:tags=>["inhours"], :original_tags=>[], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(in_hours_result)
     end
 
     it 'adds tag for out of hours alerts'  do
-      out_of_hours_result = {:tags=>["OOH", "wakinghours"], :id=>"ssg5bfb-0987-2j5i-y876-5f8ad111cf45-2846378651987"}
+      out_of_hours_result = {:tags=>["OOH", "wakinghours"], :original_tags=>[], :id=>"ssg5bfb-0987-2j5i-y876-5f8ad111cf45-2846378651987"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(out_of_hours_result)
     end
 
     it 'adds tag for waking hours alerts' do
-      waking_hours_weekday_result = {:tags=>["OOH", "wakinghours"], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
+      waking_hours_weekday_result = {:tags=>["OOH", "wakinghours"], :original_tags=>[], :id=>"f76eb5dc-a942-4c3b-bf34-695daf171e06-1629609149592"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_weekday_result)
     end
 
     it 'adds tag for weekend waking hours alerts' do
-      waking_hours_weekend_result = {:tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
+      waking_hours_weekend_result = {:tags=>["OOH", "wakinghours"], :original_tags=>[], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_weekend_result)
     end
 
     it 'adds tag for sleeping hours alerts' do
-      sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
+      sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :original_tags=>[], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(sleeping_hours_result)
     end
 
     it 'adds tag for bank holiday alerts' do
-      waking_hours_bank_holiday_result = {:tags=>["OOH", "wakinghours"], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
+      waking_hours_bank_holiday_result = {:tags=>["OOH", "wakinghours"], :original_tags=>[], :id=>"g4747aac-fa97-4838-8e2f-69992de30a1c-1629601435423"}
       outcome = subject.all_updated_alerts
       expect(outcome).to include(waking_hours_bank_holiday_result)
     end
@@ -73,7 +73,7 @@ RSpec.describe OpsgenieAlertTagging do
       end
 
       it 'only adds unique tags to the alert' do
-        result_with_unique_tags = {:tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
+        result_with_unique_tags = {:tags=>["OOH", "wakinghours"], :original_tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}
         outcome = subject.all_updated_alerts
         expect(outcome).to include(result_with_unique_tags)
       end
@@ -85,7 +85,7 @@ RSpec.describe OpsgenieAlertTagging do
       end
 
       it 'tags the alert as sleeping hours' do
-        sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
+        sleeping_hours_result = {:tags=>["OOH", "sleepinghours"], :original_tags=>[], :id=>"2052428d-b82a-4198-924f-7b66d568d2e1-1629606104840"}
         outcome = subject.all_updated_alerts
         expect(outcome).to include(sleeping_hours_result)
       end
@@ -95,7 +95,7 @@ RSpec.describe OpsgenieAlertTagging do
   describe '.tag_alerts_on_opsgenie' do
     it 'updates alert in Opsgenie ' do
 
-      allow(subject).to receive(:all_updated_alerts).and_return([{:tags=>["inhours"], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}])
+      allow(subject).to receive(:all_updated_alerts).and_return([{:tags=>["inhours"], :original_tags=>[], :id=>"ccd0bcac-2235-4d9f-a043-5f8ad111cf45-1629609505865"}])
 
       expect(HTTParty).to receive(:post)
         .with(
@@ -108,6 +108,14 @@ RSpec.describe OpsgenieAlertTagging do
         ).and_return({result: "this is a result"})
 
         subject.tag_alerts_on_opsgenie
+    end
+
+    it 'does not update an alert that is already tagged correctly' do
+      allow(subject).to receive(:all_updated_alerts).and_return([{:tags=>["OOH", "wakinghours"], :original_tags=>["OOH", "wakinghours"], :id=>"f4747aac-fa97-4838-8e2f-69992de30a1c-1629601435401"}])
+
+      expect(HTTParty).not_to receive(:post)
+
+      subject.tag_alerts_on_opsgenie
     end
   end
 
