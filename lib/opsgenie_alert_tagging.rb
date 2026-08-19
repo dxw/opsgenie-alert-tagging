@@ -34,6 +34,7 @@ class OpsgenieAlertTagging
       alert = OpsgenieAlert.new(raw_alert)
       result = {}
       result[:tags] = alert.tags
+      result[:original_tags] = alert.tags.dup
       result[:id] = alert.id
 
       result[:tags] << "inhours" if alert.in_hours?
@@ -48,6 +49,11 @@ class OpsgenieAlertTagging
 
   def tag_alerts_on_opsgenie
     all_updated_alerts.each do |alert|
+      if alert[:tags].sort == alert[:original_tags].sort
+        puts "Skipping OpsGenie alert #{alert[:id]} as it is already tagged correctly."
+        next
+      end
+
       response = HTTParty.post("https://api.opsgenie.com/v2/alerts/#{alert[:id]}/tags",
         :headers => {
           "Content-Type" => "application/json",
